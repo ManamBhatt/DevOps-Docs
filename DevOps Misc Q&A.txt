@@ -1,0 +1,369 @@
+
+GIT
+Q1.Why we need git? What makes git unique from other tools like SVN?
+> Git is Distributed VCS. Supports non-liner development.
+
+Q2.Let's sayihave maven repo cloned on to my local, did some changes andihave build the code now target folder will be generated. So now whenido git operations like git add, git commit or any other git operations target folder should not be considered, how would you achieve the same?
+> Add "target/" to the .gitignore file in your project's root directory.
+
+
+Q3.Difference between git pull and git fetch?
+> git pull: retrieves the changes from remote repo and merges them automatically into current branch.
+> git fetch: only retrieves changes from remote repo.
+
+Q4.How to clone specific branch in git?
+> git clone -b branch_name repository_url
+
+Maven
+Q1.when i issue mvn install what all things happen in background?
+> 
+Clean Phase:
+Removes the target directory to ensure a clean build environment.
+Validate Phase:
+Checks if the project is correct and all necessary information is available.
+Compile Phase:
+Compiles the source code in the src/main/java directory and places the compiled classes in the target/classes directory.
+Test Phase:
+Compiles and runs unit tests from the src/test/java directory using testing frameworks like JUnit.The compiled test classes are placed in the target/test-classes directory.
+Package Phase:
+Takes the compiled classes, along with resources from the src/main/resources directory, and packages them into a distributable format (e.g., JAR, WAR).
+Integration Test Phase:
+Processes and deploys the package if integration tests are specified.
+Verify Phase:
+Runs checks on the results of integration tests to ensure quality criteria are met.
+Install Phase:
+Copies the packaged artifact (e.g., JAR, WAR) to the local Maven repository (~/.m2/repository) for use by other projects.
+Deploy Phase:
+Copies the packaged artifact to a remote repository for sharing with other developers or projects.
+
+Q2.what are the settings you need to do before running mvn deploy?
+> Before running mvn deploy in Maven, you need to configure the necessary settings in your 'pom.xml' file and 'settings.xml' file in 'conf' or .m2 directory.
+
+Q3.why maven takes much time for 1st execution and from 2nd execution it will take less time?
+> It needs to download dependencies, plugins and other artifacts. Later it caches dependencies locally.('~/.m2/repository')
+
+
+Unix and Shell Scripting
+Q1.How to get present working folder?
+> pwd
+
+Q2.How to copy files from local windows machine to cloud based Linux machine?
+> scp -i /path/to/private_key.pem local_file_path\filename user@remote_ip:/remote_directory
+
+
+Q3.A shell script named test.sh can accept 4 parameters i.e, a,b,c,d. the parameters wont be supplied in order always and number of parameters might also vary( only 2 parameters user might supply sometimes), how to identify position of letter c?
+> #!/bin/bash
+
+# Function to identify the position of 'c'
+find_position_of_c() {
+    for ((i=1; i<=$#; i++)); do
+        if [ "${!i}" == "c" ]; then
+            echo "Position of 'c' is: $i"
+            return
+        fi
+    done
+    echo "'c' not found in the parameters."
+}
+
+# Call the function with script parameters
+find_position_of_c "$@"
+
+Ansible
+Q1.Why we need ad-hoc ansible commands? Give scenario where you have used ansible ad-hoc command?
+> Ad-hoc commands in Ansible are useful for performing quick, one-time tasks or checks on remote servers without the need for writing a complete playbook.
+
+Some commonly used Ad-hoc commands:
+- Quick System Checks: ansible all -i inventory -m shell -a 'df -h'
+- Package Installation/Updates: ansible all -i inventory -m yum -a 'name=httpd state=present'
+- User Management: ansible all -i inventory -m user -a 'name=johndoe state=present'
+- File Operations: ansible all -i inventory -m copy -a 'src=/local/path/file.txt dest=/remote/path/'
+- Service Management: ansible all -i inventory -m service -a 'name=httpd state=started'
+- Health Checks: ansible all -i inventory -m command -a 'cat /var/log/myapp.log | grep ERROR'
+- Custom Commands: ansible all -i inventory -m shell -a 'my_custom_script.sh'
+
+Ad-hoc commands are valuable in scenarios where the task at hand is relatively simple, and writing a full playbook might be overkill
+
+
+Q2.When I need detailed logs on executing ansible playbook what option do I need to use?
+> -v (verbose) option
+  
+  Here are the different levels of verbosity:
+  -v: Verbose
+  -vv: More verbose
+  -vvv: Very verbose
+  -vvvv: Extremely verbose
+
+  Syntax: ansible-playbook -i inventory playbook.yml -vvv
+
+
+Q3.What is ansible.cfg file?
+>  The ansible.cfg file is a configuration file used by Ansible to set default values, control behavior, and configure options. 
+Common uses of ansible.cfg file: 
+>> Setting defaults, Defining Paths, Controlling Verbosity, Enabling/Disabling Callbacks, Configuring SSH options, Defining Privilege escalation settings.
+
+
+Q4.what are the common modules have you worked on? 
+> List of commonly used modules, categorized according to functionality:
+System:
+-apt, yum, dnf: Package management for Debian/Ubuntu, RHEL/CentOS, and Fedora systems.
+-systemd: Manage services using systemd.
+-user, group, useradd, userdel: User and group management.
+-file, copy, template: File and directory manipulation.
+
+Networking:
+-ios_command, ios_config: Manage Cisco IOS devices.
+-nxos_command, nxos_config: Manage Cisco Nexus devices.
+
+Cloud:
+-ec2: Manage Amazon EC2 instances.
+-azure_rm: Interact with Azure resources.
+-gcp_compute: Manage Google Cloud Platform resources.
+-openstack: Interact with OpenStack resources.
+
+Database:
+-mysql_db, postgresql_db: Manage MySQL and PostgreSQL databases.
+-mongodb: Manage MongoDB databases.
+
+Web Servers:
+-nginx: Manage NGINX configuration.
+-apache2_module, apache2_vhost: Manage Apache modules and virtual hosts.
+
+Containerization:
+-docker_container, docker_image: Manage Docker containers and images.
+-podman_container, podman_image: Manage containers using Podman.
+
+Security:
+-firewalld: Configure firewalld rules.
+-ufw: Manage Uncomplicated Firewall rules.
+-semanage: Manage SELinux policy.
+
+Monitoring and Logging:
+-nagios: Manage Nagios hosts and services.
+-syslog_ng: Manage syslog-ng configuration.
+
+Windows:
+-win_copy, win_file: File manipulation on Windows.
+-win_service: Manage Windows services.
+-win_shell, win_command: Run PowerShell or command prompt commands.
+
+Messaging:
+-rabbitmq_user, rabbitmq_vhost: Manage RabbitMQ users and virtual hosts.
+-kafka_topic: Manage Apache Kafka topics.
+
+Cloud Orchestration:
+-cloudformation: Interact with AWS CloudFormation stacks.
+-openstack.cloud: Interact with OpenStack clouds.
+
+
+Q5.which module will you use for getting the file from node to master?
+> The 'fetch' module is designed specifically for retrieving files from remote nodes and placing them on the control node.
+
+Yaml snippet:
+
+- hosts: your_target_group
+  tasks:
+    - name: Fetch file from remote node
+      fetch:
+        src: /path/on/remote/node/yourfile.txt
+        dest: /path/on/control/node/
+
+
+Q6.Lets say I have a playbook which has 5 tasks in playbook, first 2 tasks should run on local machine and other 3 tasks should run on node?
+> The 'delegate_to' parameter allows you to specify a different host where a task should be executed.
+
+Example Yaml snippet:
+
+---
+- name: Example Playbook
+  hosts: localhost  # Define the hosts where the playbook runs
+
+  tasks:
+    - name: Local Task 1
+      debug:
+        msg: "This task runs on the local machine"
+
+    - name: Local Task 2
+      debug:
+        msg: "This task also runs on the local machine"
+
+    - name: Remote Task 1
+      debug:
+        msg: "This task runs on the remote node"
+      delegate_to: "{{ inventory_hostname }}"  # Specify the target node
+
+    - name: Remote Task 2
+      shell:
+        cmd: "echo 'This shell command runs on the remote node'"
+      delegate_to: "{{ inventory_hostname }}"
+
+    - name: Remote Task 3
+      apt:
+        name: apache2
+        state: present
+      delegate_to: "{{ inventory_hostname }}"
+
+
+
+Jenkins
+Q1.How to save only last 5 builds of jenkins job?
+> For Declarative pipelines:
+  pipeline {
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5'))
+    }
+    
+    // Rest of the pipeline configuration
+  }
+
+> For Freestyle pipelines:
+  Go to the Jenkin's Job 
+  "Configure">> "Discard old Builds" >> "Max # of builds to keep with artifacts" set 5.
+
+Q2.Can we use docker container as a node in Jenkinsfile? 
+> Jenkins enables Docker container usage as build agents, allowing streamlined definition of build environments in Jenkins pipelines, known as "Docker Pipeline" or "Docker Workflow."
+
+Dockerfile snippet:
+
+pipeline {
+    agent {
+        docker {
+            image 'node:16-alpine'
+        }
+    }
+    
+    stages {
+        stage('Build') {
+            steps {
+                // Your build steps or commands go here
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        stage('Test') {
+            steps {
+                // Your test steps or commands go here
+                sh 'npm test'
+            }
+        }
+        // Additional stages can be added as needed
+    }
+
+Q3.Who handles docker container creation and deletion? 
+> The responsibility of container creation and deletion falls on the Docker daemon process called "dockerd".
+
+
+Q4.If I am building a maven project, if the docker container is a fresh instance, it will try to download dependency from repository, what measures you will take to reduce build time?
+> Dependency Caching, Artifact Caching, Parallel Build Execution, Optimize dockerfile, 
+
+Q5.Why we need multi branch pipeline?
+> Automated Builds for Multiple Branches, Isolation and Parallel Execution, Reduced Configuration Overhead, Scalability,Integration with Pull Requests, Efficient Use of Resources, Visibility and Traceability, Code Promotion and Deployment
+
+
+Q6.If you forget Jenkins password, how would you login back?
+>  http://your-jenkins-url/login, Unlock Jenkins
+
+
+Docker
+
+Q1.Any 3 best practices of docker?
+> Single Responsibility Principle: Run only one process per container
+> Create Lightweight Images: Keep container images small by optimizing layers and removing unnecessary components. Use multi-stage builds to separate the build environment from the runtime environment. This allows you to build your application in one image and then copy only the necessary artifacts to a smaller image for runtime.
+> Use Official Images: Base your containers on official, well-maintained Docker images
+> Implement Container Orchestration: Use container orchestration tools like Kubernetes or Docker Swarm to manage and scale your containers in a production environment
+
+
+Q2.Difference between docker stop and docker kill?
+> 'docker stop' allows a container to gracefully shut down by sending a termination signal, allowing processes inside the container to handle the shutdown process.
+> 'docker kill' forcefully terminates a running container by sending a kill signal, without giving the container's processes a chance to clean up.
+
+
+Q3.Command to list conatiners which state is exited?
+>  docker ps -a --filter "status=exited"
+
+
+Q4.command to clean-up docker host ( deleting stopped conatiners, dangling images and unused networks)?
+> docker system prune -af
+
+
+Q5.What version of docker you have used? Specific reason to use that particular version?
+> 23.0(deprecated), 24.0 and 25.0
+Deciding factors to select a specific version: 
+Feature requirement, Compatibility, security updates, Avoid version deprecation, Long term support.
+
+refer: https://endoflife.date/docker-engine
+
+Q6.Can we have multiple CMD in Dockerfile?
+>  No, a Dockerfile can have only one CMD instruction. If multiple CMD instructions are provided, only the last one will take effect.
+
+Q7.Have you worked on docker swarm and docker compose?
+> Listing diff between swarm and compose: 
+Scope:
+-Docker Swarm focuses on orchestrating and managing a cluster of Docker hosts to deploy and scale services.
+-Docker Compose is designed for defining and running multi-container applications on a single host, often used for local development and testing.
+Usage:
+- Docker Swarm is used for managing production-ready, distributed applications in a clustered environment.
+- Docker Compose is typically used for defining and managing development or testing environments where multiple containers need to work together.
+Deployment:
+- Docker Swarm manages the deployment of services across a cluster of nodes.
+- Docker Compose deploys services on a single host or on a limited set of connected hosts.
+Scaling:
+- Docker Swarm scales services horizontally by adding or removing instances across the cluster.
+- Docker Compose can scale individual services vertically by specifying the desired number of replicas.
+Configuration:
+- Docker Swarm configuration involves setting up a swarm, defining services, and managing clusters.
+- Docker Compose configuration involves defining services, networks, and volumes in a single YAML file.
+
+
+Kubernetes
+Q1.Can we have multiple containers in a pod? 
+>Yes, Kubernetes allows for multiple containers to run within a single Pod. A Pod is the smallest and simplest unit in the Kubernetes object model, and it represents a single instance of a running process in a cluster. Containers within a Pod share the same network namespace, allowing them to communicate with each other using localhost.
+
+Q2.Can we have similar conatiners in a pod? 
+> Yes, a pod in Kubernetes can have multiple containers, and those containers can be similar or identical in terms of their images and configurations.
+
+YAML Code Snippet-->
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx:latest
+  - name: my-container
+    image: nginx:latest
+
+Q3.Lets say I have 4 containers, one of them has failed how would you check which container has failed?
+> kubectl describe pod <pod_name>
+
+Q4.What is liveness and readiness probe? Why we need them?
+> Liveness : Checks if a container is running properly by periodically executing a specified command or HTTP request. If the probe fails, Kubernetes restarts the container.
+> Readiness : Determines whether a container is ready to serve traffic. If the probe fails, the container is temporarily removed from service until it passes the probe.
+
+Q5.Kubernetes monitoring? Which tools you have used?
+> Kubernetes monitoring involves tracking and analyzing the performance, health, and resource utilization of the entire Kubernetes infrastructure, as well as the applications running within it. List of tools: Prometheus , Grafana, Kube-state-metrics, New Relic, Datadog, ELK and SYSDIG.
+
+Q6.Can we deploy a pod on particular node?
+> Yes, by using Node-Affinity.
+
+  apiVersion: v1
+kind: Pod
+metadata:
+  name: node-affinity-pod
+spec:
+  containers:
+  - name: my-container
+    image: nginx:latest
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: my-label-key
+            operator: In
+            values:
+            - my-label-value
+
+
+
